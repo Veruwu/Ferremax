@@ -20,3 +20,10 @@ def addMensaje(Rut_Cliente):
     except Exception as ex:
         return jsonify({"message": str(ex)}), 500
 
+@main.route('/get/<Rut_Cliente>', methods=['GET'])
+def getMensaje(Rut_Cliente):
+    try:
+        clientes = MensajesModel.get_Mensaje(Rut_Cliente)
+        return jsonify(clientes)
+    except Exception as ex:
+        return jsonify({"message": str(ex)}), 500

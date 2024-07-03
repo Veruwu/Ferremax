@@ -30,3 +30,20 @@ class Producto():
             'Fecha_Fin_Estado': self.Fecha_Fin_Estado
         }
 
+
+class Productocat():
+    def __init__(self,
+                 Nombre_Categoria=None,
+                 Nombre_Producto=None,
+                 Precio=None):
+        self.Nombre_Categoria = Nombre_Categoria
+        self.Nombre_Producto = Nombre_Producto
+        self.Precio = Precio
+
+    def to_JSON(self):
+        return {
+            'Nombre_Categoria': self.Nombre_Categoria,
+            'Nombre_Producto': self.Nombre_Producto,
+            'Precio': self.Precio
+        }
+                    

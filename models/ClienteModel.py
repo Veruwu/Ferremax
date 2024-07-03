@@ -5,6 +5,7 @@ from flask import request
 import bcrypt
 
 
+
 class ClienteModel():
   @classmethod
   def getCliente(self):
@@ -63,6 +64,22 @@ class ClienteModel():
       return affected_rows
     except Exception as ex:
       raise Exception(ex)
+
+  @classmethod
+  def delete_Cliente(self, Rut):
+    try:
+      cx = get_connection()
+      with cx.cursor() as cursor:
+        cursor.execute(
+            "DELETE FROM cliente WHERE Rut_Cliente = '{0}'::text".format(Rut))
+        affected_rows = cursor.rowcount
+        cx.commit()
+      cx.close()
+      return affected_rows
+
+    except Exception as ex:
+      raise Exception(ex)
+  
       
 
   @classmethod

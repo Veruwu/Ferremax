@@ -36,7 +36,7 @@ def add_Producto():
                 Fecha_Inicio_Estado=request.json['Fecha_Inicio_Estado'],
                 )
             if ProductoModel.add_Producto(producto):
-                return jsonify(producto.Nombre)
+                return jsonify({"message": "Producto agregado"})
             else:
                 return jsonify({"message": "Error al insertar"}), 500
         else:
@@ -48,17 +48,14 @@ def add_Producto():
 @main.route("/update/<ID_Producto>", methods=['PUT'])
 def update_Producto(ID_Producto):
     try:
-        if request.json and 'Nombre' in request.json and 'Descripcion' in request.json and 'Precio_Base' in request.json and 'ID_Categoria' in request.json and 'Estado' in request.json and 'Fecha_Inicio_Estado' in request.json and 'Fecha_Fin_Estado' in request.json:
+        if request.json and 'Nombre' in request.json and 'Descripcion' in request.json and 'Precio_Base' in request.json and 'ID_Categoria' in request.json:
             producto = Producto(
                 Nombre=request.json['Nombre'],
                 Descripcion=request.json['Descripcion'],
                 Precio_Base=request.json['Precio_Base'],
-                ID_Categoria=request.json['ID_Categoria'],
-                Estado=request.json['Estado'],
-                Fecha_Inicio_Estado=request.json['Fecha_Inicio_Estado'],
-                Fecha_Fin_Estado=request.json['Fecha_Fin_Estado'])
+                ID_Categoria=request.json['ID_Categoria'])
             if ProductoModel.update_Producto(producto, ID_Producto):
-                return jsonify(producto.Nombre)
+                return jsonify({"message": "Producto actualizado"})
             else:
                 return jsonify({"message": "Error al actualizar"}), 500
         else:
@@ -68,3 +65,12 @@ def update_Producto(ID_Producto):
         return jsonify({"message": str(ex)}), 500
 
     
+@main.route("/delete/<ID_Producto>", methods=['DELETE'])
+def delete_Producto(ID_Producto):
+    try:
+        if ProductoModel.delete_Producto(ID_Producto):
+            return jsonify({"message": "Producto eliminado"})
+        else:
+            return jsonify({"message": "Error al eliminar"}), 500
+    except Exception as ex:
+        return jsonify({"message": str(ex)}), 500

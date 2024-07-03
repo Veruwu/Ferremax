@@ -9,12 +9,10 @@ class MensajesModel():
             mensajes = []
             with cx.cursor() as cursor:
                 cursor.execute(
-                    'SELECT ID_Mensaje, ID_Cliente, ID_Vendedor, Fecha_Mensaje, Estado, Mensaje FROM mensajes WHERE ID_Cliente = %s',
-                    (ID_Cliente))
+                    "SELECT * FROM consultas WHERE Rut_Cliente = '{0}'::text".format(ID_Cliente))
                 resultset = cursor.fetchall()
                 for row in resultset:
-                    mensaje = Consulta(row[0], row[1], row[2], row[3], row[4],
-                                       row[5])
+                    mensaje = Consulta(row[0], row[1], row[2], row[3], row[4])
                     mensajes.append(mensaje.to_JSON())
                 cx.close()
                 return mensajes

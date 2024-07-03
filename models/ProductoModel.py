@@ -1,5 +1,5 @@
 from database.db import get_connection
-from models.entities.Producto import Producto
+from models.entities.Producto import Producto, Productocat
 
 
 class ProductoModel():
@@ -30,11 +30,11 @@ class ProductoModel():
       productos = []
       with cx.cursor() as cursor:
         cursor.execute(
-            'SELECT c.Nombre_Categoria,p.Nombre AS Nombre_Producto,p.Precio_Base FROM producto p JOIN categoria c ON p.ID_Categoria = %s',(ID_Categoria)
+            'SELECT c.Nombre_Categoria,p.Nombre AS Nombre_Producto,p.Precio_Base FROM producto p JOIN categoria c ON p.ID_Categoria = c.ID_Categoria where c.ID_Categoria = %s',(ID_Categoria)
         )
         resultset = cursor.fetchall()
         for row in resultset:
-          producto = Producto(row[0], row[1])
+          producto = Productocat(row[0], row[1], row[2])
           productos.append(producto.to_JSON())
         cx.close()
         return productos
@@ -65,11 +65,9 @@ class ProductoModel():
       cx = get_connection()
       with cx.cursor() as cursor:
         cursor.execute(
-            "UPDATE producto SET Nombre = %s, Descripcion = %s, Precio_Base = %s, ID_Categoria = %s, Estado = %s, Fecha_Inicio_Estado = %s, Fecha_Fin_Estado = %s WHERE ID_Producto = %s",
+            "UPDATE producto SET Nombre = %s, Descripcion = %s, Precio_Base = %s, ID_Categoria = %s WHERE ID_Producto = %s",
             (producto.Nombre, producto.Descripcion, producto.Precio_Base,
-             producto.ID_Categoria, producto.Estado,
-             producto.Fecha_Inicio_Estado, producto.Fecha_Fin_Estado,
-             (ID_Producto)))
+             producto.ID_Categoria,(ID_Producto)))
         affected_rows = cursor.rowcount
         cx.commit()
       cx.close()
@@ -77,3 +75,20 @@ class ProductoModel():
         
     except Exception as ex:
       raise Exception(ex)
+
+
+  @classmethod
+  def delete_Producto(self, ID_Producto):
+    try:
+      cx = get_connection()
+      with cx.cursor() as cursor:
+        cursor.execute(
+            "DELETE FROM producto WHERE ID_Producto = {0}".format(ID_Producto))
+        affected_rows = cursor.rowcount
+        cx.commit()
+      cx.close()
+      return affected_rows
+
+    except Exception as ex:
+      raise Exception(ex)
+    

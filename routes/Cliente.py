@@ -40,6 +40,20 @@ def add_Cliente():
         return jsonify({"message": str(ex)}), 500
 
 
+@main.route("/delete/<Rut_Cliente>", methods=['DELETE'])
+def delete_Cliente(Rut_Cliente):
+    try:
+        if ClienteModel.delete_Cliente(Rut_Cliente):
+            return jsonify({"message": "Cliente eliminado correctamente"})
+        else:
+            return jsonify({"message": "El cliente no existe"}), 404
+    except Exception as ex:
+        return jsonify({"message": str(ex)}), 500
+    
+        
+
+
+
 @main.route('/login', methods=['POST'])
 def login():
     try:
@@ -54,9 +68,9 @@ def login():
             if ClienteModel.login(cliente):
                 return jsonify({"message": "Autenticación correcta"})
             else:
-                return jsonify({"message": "Correo y/o contraseña incorrectos"}), 500
+                return jsonify({"message": "Correo y/o contraseña incorrectos"}), 400
         else:
             return jsonify({"message": "Correo or contraseña key is missing in the request JSON"}), 400
 
     except Exception as ex:
-        return jsonify({"message": str(ex)}), 500
+        return jsonify({"message": str(ex)}), 400

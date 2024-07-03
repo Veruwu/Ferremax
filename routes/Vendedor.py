@@ -38,6 +38,7 @@ def add_Vendedor():
         return jsonify({"message": str(ex)}), 500
 
 
+
 @main.route('/login', methods=['POST'])
 def login():
     try:
@@ -52,9 +53,21 @@ def login():
             if VendedorModel.login(vendedor):
                 return jsonify({"message": "Autenticación correcta"})
             else:
-                return jsonify({"message": "Correo y/o contraseña incorrectos"}), 500
+                return jsonify({"message": "Correo y/o contraseña incorrectos"}), 400
         else:
             return jsonify({"message": "Correo or contraseña key is missing in the request JSON"}), 400
 
     except Exception as ex:
         return jsonify({"message": str(ex)}), 500
+
+
+@main.route('/delete/<Rut_Vendedor>', methods=['DELETE'])
+def delete_Vendedor(Rut_Vendedor):
+    try:
+        if VendedorModel.delete_Vendedor(Rut_Vendedor):
+            return jsonify({"message": "Vendedor eliminado correctamente"})
+        else:
+            return jsonify({"message": "El vendedor no existe"}), 404
+    except Exception as ex:
+        return jsonify({"message": str(ex)}), 500
+

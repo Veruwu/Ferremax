@@ -66,6 +66,20 @@ class VendedorModel():
 
 
   @classmethod
+  def delete_Vendedor(self, Rut_Vendedor):
+    try:
+      cx = get_connection()
+      with cx.cursor() as cursor:
+        cursor.execute(
+            "DELETE FROM vendedor WHERE Rut_Vendedor='{0}'::text".format(Rut_Vendedor))
+        affected_rows = cursor.rowcount
+        cx.commit()
+      cx.close()
+      return affected_rows
+    except Exception as ex:
+      raise Exception(ex)
+
+  @classmethod
   def login(self, vendedor):
     try:
       cx = get_connection()
